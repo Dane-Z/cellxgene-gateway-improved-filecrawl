@@ -50,17 +50,17 @@ class FileItemSource(ItemSource):
     def get_annotations_subpath(self, item) -> str:
         return self.convert_h5ad_path_to_annotation(item.descriptor)
 
+    ## Changes here: Added "admin" specification to get list of all projects available in cellxgene data directory. This replaces the top level "local" call
+    ## "local" or root call will no longer show all directories --> obscures information from curious researchers. 
+    ## Only URL of group page should be given to researchers so that they can only access their information
     def list_items(self, filter: str = None) -> ItemTree:
-        item_tree = self.scan_directory("" if filter is None else filter)
-
-        """def get_items(dir):
-            if dir.branches:
-                return [*dir.items, *[item for subdir in dir.branches for item in get_items(subdir)]]
-            else:
-                return dir.items
-
-        return get_items(self.item_tree)"""
-
+        if filter is None:
+          #  item_tree = self.scan_directory("")
+            item_tree = ItemTree("", [], [])
+        elif filter == "admin":
+            item_tree = self.scan_directory("")
+        else:
+            item_tree = self.scan_directory(filter)
         return item_tree
 
     def scan_directory(self, subpath="") -> dict:
