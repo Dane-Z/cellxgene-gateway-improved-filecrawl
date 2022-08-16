@@ -118,13 +118,13 @@ def handle_invalid_process(error):
     )
 
 
-@app.route("/favicon.ico")
-def favicon():
-    return send_from_directory(
-        os.path.join(app.root_path, "static"),
-        "nibr.ico",
-        mimetype="image/vnd.microsof.icon",
-    )
+#@app.route("/favicon.ico")
+#def favicon():
+#    return send_from_directory(
+ #       os.path.join(app.root_path, "static"),
+  #      "nibr.ico",
+   #     mimetype="image/vnd.microsof.icon",
+   # )
 
 
 @app.route("/")
@@ -299,7 +299,7 @@ def launch():
 
 def main():
     logging.basicConfig(
-        level=env.log_level,
+        level=logging.INFO,
         format="%(asctime)s:%(name)s:%(levelname)s:%(message)s",
     )
     cellxgene_data = os.environ.get("CELLXGENE_DATA", None)
@@ -324,3 +324,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+
+
+
+
