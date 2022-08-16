@@ -1,0 +1,21 @@
+## Daemon to launch cellxgene-gateway and provide parameters necessary to launch without apache reverse proxy
+
+[Unit]
+Description=cellxgene-gateway-daemon
+After=systemd-user-sessions.service
+
+[Service]
+User=<USER>@LAB.ORG
+WorkingDirectory=/home/Public_Data/
+Environment=CELLXGENE_LOCATION=/usr/local/bin/cellxgene
+Environment=CELLXGENE_DATA=/home/Public_Data/cellxgene_data/
+Environment=EXTERNAL_HOST=<ServerIP>:5006
+Environment=EXTERNAL_PROTOCOL=http
+Environment=GATEWAY_IP=<ServerIP>
+Environment=GATEWAY_PORT=5006
+Environment=GATEWAY_ENABLE_ANNOTATIONS=1
+ExecStart=/usr/local/bin/cellxgene-gateway
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
