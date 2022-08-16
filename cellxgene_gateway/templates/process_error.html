@@ -13,11 +13,11 @@
 <head>
      <title>Cellxgene Gateway - Process Error</title>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-     <link rel="icon" type="image/png" href="nibr.png">
-	{% for script in extra_scripts %}
-	<script src="{{ script }}"></script>
-	{% endfor %}
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- <link rel="icon" type="image/png" href="nibr.png"> -->
+        {% for script in extra_scripts %}
+        <script src="{{ script }}"></script>
+        {% endfor %}
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
      <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
@@ -33,19 +33,20 @@
           <tr><th>Stderr</th><td>{{ stderr }}</td></tr>
      </table>
 <br>
-<h4>Options</h4>
+<!-- <h4>Options</h4>
      Please choose one of the following, or use the back button:
      <ul>
           <li><a href="{{ relaunch_url }}">
                     Attempt to relaunch the cellxgene server.
                </a></li>
           <li><a href="{{ url_for('filecrawl') }}">
-               Return to the file directory.
+                             Return to the file directory.
           </a></li>
           <li><a href="{{ url_for('index') }}">
                Return to the homepage.
           </a></li>
      </ul>
-     
+-->
 </body>
 </html>
+
