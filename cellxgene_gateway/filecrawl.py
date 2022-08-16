@@ -19,7 +19,7 @@ def render_annotations(item, item_source):
     url = flask_util.view_url(
         item_source.get_annotations_subpath(item), item_source.name
     )
-    new_annotation = f"<a class='new' href='{url}'>new</a>"
+    new_annotation = f"<a class='new' href='{url}'>Make new annotation</a>"
     annotations = (
         ", ".join(
             [
