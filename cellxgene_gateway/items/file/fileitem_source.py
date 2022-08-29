@@ -50,20 +50,20 @@ class FileItemSource(ItemSource):
     def get_annotations_subpath(self, item) -> str:
         return self.convert_h5ad_path_to_annotation(item.descriptor)
 
-    ## Changes here: Added "admin" specification to get list of all projects available in cellxgene data directory. This replaces the top level "local" call
-    ## "local" or root call will no longer show all directories --> obscures information from curious researchers. 
-    ## Only URL of group page should be given to researchers so that they can only access their information
     def list_items(self, filter: str = None) -> ItemTree:
+        # If we navigate to the base page, we show blank view (no items or branches) to obscure data from scientists
         if filter is None:
           #  item_tree = self.scan_directory("")
             item_tree = ItemTree("", [], [])
+        # If we navigate to "admin" we show top level folders (no items) to provide links to sites for labs by admin and maintainers
         elif filter == "admin":
-            item_tree = self.scan_directory("")
+            item_tree = self.scan_directory("",top=True)
+        # If we navigate to webpage, show all branches and items
         else:
             item_tree = self.scan_directory(filter)
         return item_tree
 
-    def scan_directory(self, subpath="") -> dict:
+    def scan_directory(self, subpath="", top=False) -> dict:
         base_path = os.path.join(self.base_path, subpath)
 
         if not os.path.exists(base_path):
@@ -86,22 +86,39 @@ class FileItemSource(ItemSource):
             if self.is_h5ad_file(full_path)
         ]
 
-        subdirs = [
-            filepath
-            for filepath, full_path in filepath_map.items()
-            if os.path.isdir(full_path) and not is_annotation_dir(filepath)
-        ]
+        if top==False:
+            subdirs = [
+                filepath
+                for filepath, full_path in filepath_map.items()
+                if os.path.isdir(full_path) and not is_annotation_dir(filepath)
+            ]
+        elif top==True:
+            subdirs = [
+                filepath
+                for filepath, base_path in filepath_map.items()
+                if os.path.isdir(base_path) and not is_annotation_dir(filepath)
+            ]
 
         items = [
             self.make_fileitem_from_path(filename, subpath) for filename in h5ad_paths
         ]
         branches = None
-        if len(subdirs) > 0:
-            branches = [
-                self.scan_directory(os.path.join(subpath, subdir)) for subdir in subdirs
-            ]
-
-        return ItemTree(subpath, items, branches)
+        if top==False:
+            if len(subdirs) > 0:
+                branches = [
+                   self.scan_directory(os.path.join(subpath, subdir)) for subdir in subdirs
+                ]
+        elif top==True:
+            DIRNAMES=1
+            if len(subdirs) > 0:
+                branches = [
+                  self.scan_directory(os.path.join(subpath, subdir), top=True) for subdir in subdirs
+                ]
+        # If on admin page, make item list blank so that we only list available branches
+        if top==True:
+            return ItemTree(subpath, [], branches)
+        else:
+            return ItemTree(subpath, items, branches)
 
     def create_annotation(self, item: FileItem, name: str) -> FileItem:
         annotation = self.make_fileitem_from_path(
